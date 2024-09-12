@@ -14,8 +14,11 @@ import java.util.Optional;
 import org.apache.catalina.connector.Response;
 import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -43,6 +46,14 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     
     private final AuthenticationManager authenticationManager;
+
+    private JavaMailSender mailSender;
+    
+    @Value("${app.recovery.token.expiry}")
+    private long recoveryTokenExpiry;
+
+    @Value("${app.base.url}")
+    private String baseUrl;
 
     public AuthenticationService(
         UserRepository userRepository,
@@ -82,18 +93,10 @@ public class AuthenticationService {
             }
         }
 
-    
-    @Autowired
-    private JavaMailSender mailSender;
 
-    @Autowired
-    private UserRepository userRepository;
-
-  
 
     //Recuperar contraseña
     public ResponseEntity<?> recuperarContraseña(RecuperacionClave recuperacionClave) {
-        try {
             //Formato no valido, 400
             if (recuperacionClave.getCorreo() == null) {
                 Error error = new Error("Correo electrónico no proporcionado");
@@ -106,33 +109,16 @@ public class AuthenticationService {
                 return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
             }
 
-            Optional <Usuario> usuario = userRepository.findByCorreo(recuperacionClave.getCorreo());
-                    
-            String token = generateResetToken(usuario);
-            String resetLink = "http://localhost:8080/recuperacion-clave?token=" + token;
-
+            Optional <Usuario> usuarioo = userRepository.findByCorreo(recuperacionClave.getCorreo());
+            Usuario usuario = usuarioo.get();
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(recuperacionClave.getCorreo());
-            message.setSubject("Solicitud de recuperación de contraseña");
-            message.setText("Para restablecer tu contraseña, haz clic en el siguiente enlace:\n" + resetLink);
+            message.setSubject("Contraseña olvidada");
+            message.setText(usuario.getContraseña());
             mailSender.send(message);
-
             return new ResponseEntity<>("Correo de recuperación enviado con éxito", HttpStatus.OK);
-
-        } catch (UserNotFoundException e) {
-            Error error = new Error(e.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            Error error = new Error("Error al enviar el correo de recuperación");
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
-
-    private String generateResetToken(User user) {
-        // Implementa la lógica para generar un token único
-        return UUID.randomUUID().toString();
-    }
-        
+ 
    
     }
 

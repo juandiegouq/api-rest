@@ -104,8 +104,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
-          description: Usuario no encontrado.
+        '401':
+          description: No autorizado.
           content:
             application/json:
               schema:

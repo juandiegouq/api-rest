@@ -29,7 +29,7 @@ public class AuthenticationController {
     //Recuperación contraseña 
     @PostMapping("/recuperacion-clave")
     public ResponseEntity<?> recuperarClave(@RequestBody RecuperacionClave recuperacionClave) {
-        return authenticationService.recuperacionClave(recuperacionClave);
+        return authenticationService.recuperarContraseña(recuperacionClave);
     }
 
 

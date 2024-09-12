@@ -12,7 +12,11 @@ public class Exito {
 
   private String message;
 
-  public Exito message(String message) {
+  public Exito(String message) {
+    this.message = message;
+  }
+
+public Exito message(String message) {
     this.message = message;
     return this;
   }
