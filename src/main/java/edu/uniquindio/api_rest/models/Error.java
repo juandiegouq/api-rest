@@ -13,6 +13,7 @@ public class Error {
   private String message;
 
   public Error(String message) {
+    //TODO Auto-generated constructor stub
     this.message = message;
   }
 
