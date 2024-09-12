@@ -142,7 +142,7 @@ paths:
       security:
         - bearerAuth: []
 
-  /usuarios/login:
+  /login:
     post:
       summary: Inicio de sesión del usuario
       description: Autentica a un usuario proporcionando su nombre de usuario y contraseña.
@@ -174,7 +174,7 @@ paths:
                 $ref: '#/components/schemas/Error'
       security: [] # No se requiere autenticación para login
 
-  /usuarios/recuperacion-clave:
+  /recuperacion-clave:
     post:
       summary: Recuperación de contraseña
       description: Envía un correo con un enlace para restablecer la contraseña.

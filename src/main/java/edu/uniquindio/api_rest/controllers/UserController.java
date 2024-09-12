@@ -45,19 +45,4 @@ public class UserController {
         return userService.eliminarUsuario(usuarioId);
     }
 
-    // Inicio de sesión
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
-        return userService.login(login);
-    }
-
-    // Recuperación de contraseña
-    @PostMapping("/recuperacion-clave")
-    public ResponseEntity<?> recuperarClave(@RequestBody RecuperacionClave recuperacionClave) {
-        return userService.recuperarClave(recuperacionClave);
-    }
-
-
-
-    
 }
