@@ -1,4 +1,7 @@
 package edu.uniquindio.api_rest.services;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -132,6 +135,12 @@ public ResponseEntity<?> obtenerUsuario(int usuarioId) {
                 return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
             }
         }
+    }
+
+    public Page<Usuario> obtenerLista(int page, int size) {
+        // TODO Auto-generated method stub
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
     }
 
 }

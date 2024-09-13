@@ -1,6 +1,8 @@
 package edu.uniquindio.api_rest.controllers;
 import edu.uniquindio.api_rest.models.*;
 import edu.uniquindio.api_rest.services.*;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,14 @@ public class UserController {
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable int usuarioId) {
         return userService.eliminarUsuario(usuarioId);
+    }
+
+    // Listar todos los usuarios -paginado
+    @GetMapping("/")
+    public Page<Usuario> obtenerLista() {
+        int page = 2;
+        int size = 10;
+        return userService.obtenerLista(page,size);
     }
 
 }
