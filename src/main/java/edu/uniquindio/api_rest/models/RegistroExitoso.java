@@ -14,9 +14,9 @@ public class RegistroExitoso {
 
   private String message;
 
-  private String usuarioId;
+  private int usuarioId;
 
-  public RegistroExitoso (String message, @NotNull String usuarioId) {
+  public RegistroExitoso (String message, @NotNull int usuarioId) {
     this.message = message;
     this.usuarioId = usuarioId;
   }
@@ -40,7 +40,7 @@ public class RegistroExitoso {
     this.message = message;
   }
 
-  public RegistroExitoso usuarioId(String usuarioId) {
+  public RegistroExitoso usuarioId(int usuarioId) {
     this.usuarioId = usuarioId;
     return this;
   }
@@ -51,11 +51,11 @@ public class RegistroExitoso {
    */
   
   @JsonProperty("usuarioId")
-  public String getUsuarioId() {
+  public int getUsuarioId() {
     return usuarioId;
   }
 
-  public void setUsuarioId(String usuarioId) {
+  public void setUsuarioId(int usuarioId) {
     this.usuarioId = usuarioId;
   }
 

@@ -29,19 +29,19 @@ public class UserController {
 
     // Obtener detalles del usuario por ID
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<?> obtenerUsuario(@PathVariable String usuarioId) {
+    public ResponseEntity<?> obtenerUsuario(@PathVariable int usuarioId) {
         return userService.obtenerUsuario(usuarioId);
     }
 
     // Actualizar detalles del usuario
     @PutMapping("/{usuarioId}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable String usuarioId, @RequestBody UsuarioActualizacion usuarioActualizacion) {
+    public ResponseEntity<?> actualizarUsuario(@PathVariable int usuarioId, @RequestBody UsuarioActualizacion usuarioActualizacion) {
         return userService.actualizarUsuario(usuarioId, usuarioActualizacion);
     }
 
     // Eliminar un usuario por ID
     @DeleteMapping("/{usuarioId}")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable String usuarioId) {
+    public ResponseEntity<?> eliminarUsuario(@PathVariable int usuarioId) {
         return userService.eliminarUsuario(usuarioId);
     }
 

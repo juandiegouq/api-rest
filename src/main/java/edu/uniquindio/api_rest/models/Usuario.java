@@ -29,7 +29,7 @@ public class Usuario implements UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
-  private String usuarioId;
+  private Integer usuarioId;
 
   @Column(nullable = false)
   private String nombreUsuario;
@@ -47,13 +47,19 @@ public class Usuario implements UserDetails {
   /**
    * Constructor with only required parameters
    */
-  public Usuario(String usuarioId, String nombreUsuario, String correo) {
+  public Usuario(int usuarioId, String nombreUsuario, String correo) {
     this.usuarioId = usuarioId;
     this.nombreUsuario = nombreUsuario;
     this.correo = correo;
   }
 
-  public Usuario usuarioId(String usuarioId) {
+  public Usuario(@NotNull String nombreUsuario2, @NotNull String correo2, @NotNull String contraseña2) {
+    this.nombreUsuario =nombreUsuario2;
+    this.correo = correo2;
+    this.contraseña = contraseña2;
+  }
+
+  public Usuario usuarioId(int usuarioId) {
     this.usuarioId = usuarioId;
     return this;
   }
@@ -64,11 +70,11 @@ public class Usuario implements UserDetails {
    */
   @NotNull 
   @JsonProperty("usuarioId")
-  public String getUsuarioId() {
+  public int getUsuarioId() {
     return usuarioId;
   }
 
-  public void setUsuarioId(String usuarioId) {
+  public void setUsuarioId(int usuarioId) {
     this.usuarioId = usuarioId;
   }
 

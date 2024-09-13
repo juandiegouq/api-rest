@@ -128,10 +128,7 @@ public class UsuarioRegistro {
     return o.toString().replace("\n", "\n    ");
   }
 
-public String getNombre_usuario() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getNombre_usuario'");
-}
+
 }
 
 
