@@ -6,7 +6,6 @@ import edu.uniquindio.api_rest.models.RecuperacionClave;
 import edu.uniquindio.api_rest.models.Token;
 import edu.uniquindio.api_rest.models.Usuario;
 import edu.uniquindio.api_rest.repositories.UserRepository;
-
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +28,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public AuthenticationService(
-        UserRepository userRepository,
-        AuthenticationManager authenticationManager,
-        JavaMailSender mailSender,
-        JwtService jwtService
-    ) {
+            UserRepository userRepository,
+            AuthenticationManager authenticationManager,
+            JavaMailSender mailSender,
+            JwtService jwtService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.mailSender = mailSender;
@@ -44,15 +42,14 @@ public class AuthenticationService {
         try {
             // Validar si el formato del JSON es correcto
             if (input.getNombreUsuario() == null || input.getContraseña() == null) {
-                // Formato incorrecto 
+                // Formato incorrecto
                 Error error = new Error("Entrada inválida, falta información");
                 return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
             }
 
             // Autenticar el usuario
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(input.getNombreUsuario(), input.getContraseña())
-            );
+                    new UsernamePasswordAuthenticationToken(input.getNombreUsuario(), input.getContraseña()));
             // Si la autenticación es exitosa, generar el token JWT
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtService.generateToken((UserDetails) authentication.getPrincipal());

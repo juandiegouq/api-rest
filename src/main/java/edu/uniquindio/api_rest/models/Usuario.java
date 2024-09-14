@@ -31,7 +31,7 @@ public class Usuario implements UserDetails {
   @Column(nullable = false)
   private Integer usuarioId;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String nombreUsuario;
 
   @Column(nullable = false, unique = true)

@@ -19,26 +19,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsuarioRegistro'
+              $ref: "#/components/schemas/UsuarioRegistro"
       responses:
-        '201':
+        "201":
           description: Usuario registrado con éxito.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegistroExitoso'
-        '400':
+                $ref: "#/components/schemas/RegistroExitoso"
+        "400":
           description: Entrada inválida, fallo en el registro.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '409':
+                $ref: "#/components/schemas/Error"
+        "409":
           description: El usuario ya existe.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /usuarios/{usuarioId}:
     get:
@@ -53,24 +53,24 @@ paths:
           required: true
           description: ID único del usuario.
       responses:
-        '200':
+        "200":
           description: Detalles del usuario obtenidos con éxito.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Usuario'
-        '404':
+                $ref: "#/components/schemas/Usuario"
+        "404":
           description: Usuario no encontrado.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '401':
+                $ref: "#/components/schemas/Error"
+        "401":
           description: No autorizado, se requiere autenticación.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security:
         - bearerAuth: []
 
@@ -90,26 +90,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsuarioActualizacion'
+              $ref: "#/components/schemas/UsuarioActualizacion"
       responses:
-        '200':
+        "200":
           description: Usuario actualizado con éxito.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Exito'
-        '400':
+                $ref: "#/components/schemas/Exito"
+        "400":
           description: Entrada inválida, fallo en la actualización.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '401':
+                $ref: "#/components/schemas/Error"
+        "401":
           description: No autorizado.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security:
         - bearerAuth: []
 
@@ -125,20 +125,20 @@ paths:
           required: true
           description: ID único del usuario.
       responses:
-        '204':
+        "200":
           description: Usuario eliminado con éxito.
-        '404':
+        "404":
           description: Usuario no encontrado.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '401':
+                $ref: "#/components/schemas/Error"
+        "401":
           description: No autorizado, se requiere autenticación.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security:
         - bearerAuth: []
 
@@ -152,26 +152,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Login'
+              $ref: "#/components/schemas/Login"
       responses:
-        '200':
+        "200":
           description: Inicio de sesión exitoso, devuelve token JWT.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
-        '401':
+                $ref: "#/components/schemas/Token"
+        "401":
           description: No autorizado, credenciales inválidas.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '400':
+                $ref: "#/components/schemas/Error"
+        "400":
           description: Formato de solicitud inválido.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security: [] # No se requiere autenticación para login
 
   /recuperacion-clave:
@@ -184,26 +184,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecuperacionClave'
+              $ref: "#/components/schemas/RecuperacionClave"
       responses:
-        '200':
+        "200":
           description: Correo de recuperación enviado con éxito.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Exito'
-        '404':
+                $ref: "#/components/schemas/Exito"
+        "404":
           description: Correo no encontrado.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '400':
+                $ref: "#/components/schemas/Error"
+        "400":
           description: Formato de correo inválido.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       security: [] # No se requiere autenticación para recuperación de clave
 
 components:
