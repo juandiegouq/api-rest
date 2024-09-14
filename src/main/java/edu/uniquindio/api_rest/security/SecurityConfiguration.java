@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeHttpRequests()
-            .requestMatchers("/usuarios", "/login", "/recuperacion-clave", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**", "/v2/api-docs", "/usuarios/").permitAll()  // Rutas públicas
+            .requestMatchers("/usuarios", "/login","/recuperacion-clave","/swagger-ui/**","/swagger-resources/**","/webjars/**","/v2/api-docs","/usuarios/").permitAll()  // Rutas públicas
             .anyRequest().authenticated()  // Otras rutas requieren autenticación
             .and()
             .sessionManagement()

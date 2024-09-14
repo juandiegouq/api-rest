@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class JwtService {
     @Value("${security.jwt.secret-key}")
@@ -29,7 +28,7 @@ public class JwtService {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        return claimsResolver.apply(claims);    
     }
 
     public String generateToken(UserDetails userDetails) {
