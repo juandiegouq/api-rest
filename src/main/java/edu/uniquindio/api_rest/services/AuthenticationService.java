@@ -16,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import java.util.Optional;
@@ -26,16 +27,19 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JavaMailSender mailSender;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
             JavaMailSender mailSender,
-            JwtService jwtService) {
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.mailSender = mailSender;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ResponseEntity<?> authenticate(Login input) {
@@ -82,7 +86,7 @@ public class AuthenticationService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recuperacionClave.getCorreo());
         message.setSubject("Contraseña olvidada");
-        message.setText("Su contraseña es: " + usuario.getContraseña());
+        message.setText("Su contraseña es: " + passwordEncoder.encode(usuario.getContraseña()));
         mailSender.send(message);
         return new ResponseEntity<>("Correo de recuperación enviado con éxito", HttpStatus.OK);
     }

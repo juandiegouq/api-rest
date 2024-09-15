@@ -18,6 +18,7 @@ import edu.uniquindio.api_rest.models.UsuarioRegistro;
 import edu.uniquindio.api_rest.repositories.*;
 import org.springframework.security.core.Authentication;
 
+
 @Service
 public class UserService {
 
@@ -32,7 +33,8 @@ public class UserService {
     // Registro de usuario
     public ResponseEntity<?> registrarUsuario(UsuarioRegistro usuarioRegistro) {
         // Verificar si el usuario ya existe
-        if (userRepository.existsByCorreo(usuarioRegistro.getCorreo()) || userRepository.existsByNombreUsuario(usuarioRegistro.getNombreUsuario())) {
+        if (userRepository.existsByCorreo(usuarioRegistro.getCorreo())
+                || userRepository.existsByNombreUsuario(usuarioRegistro.getNombreUsuario())) {
             // Devolver error 409 si el usuario ya existe
             Error error = new Error("El usuario ya existe");
             return new ResponseEntity<>(error, HttpStatus.CONFLICT);
