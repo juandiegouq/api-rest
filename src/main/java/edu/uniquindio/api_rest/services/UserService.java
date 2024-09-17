@@ -18,7 +18,6 @@ import edu.uniquindio.api_rest.models.UsuarioRegistro;
 import edu.uniquindio.api_rest.repositories.*;
 import org.springframework.security.core.Authentication;
 
-
 @Service
 public class UserService {
 
@@ -44,7 +43,7 @@ public class UserService {
         if (usuarioRegistro.getCorreo() == null || usuarioRegistro.getContraseña() == null
                 || usuarioRegistro.getNombreUsuario() == null) {
             // Devolver error 400 si hay datos inválidos
-            Error error = new Error("Entrada inválida, falta información");
+            Error error = new Error("Entrada inválida, falta información.");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -67,7 +66,7 @@ public class UserService {
 
         // Verificar si hay un usuario autenticado
         if (authentication == null || !authentication.isAuthenticated()) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
@@ -76,13 +75,13 @@ public class UserService {
         try {
             usuario = (Usuario) authentication.getPrincipal();
         } catch (ClassCastException e) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
         // Verificar si el usuario autenticado existe
         if (!userRepository.existsById(usuario.getUsuarioId())) {
-            Error error = new Error("Usuario no encontrado");
+            Error error = new Error("Usuario no encontrado.");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
 
@@ -92,10 +91,10 @@ public class UserService {
         } else {
             // Verificar si el usuario solicitado existe
             if (userRepository.existsById(usuarioId)) {
-                Error error = new Error("No autorizado");
+                Error error = new Error("No autorizado.");
                 return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
             } else {
-                Error error = new Error("Usuario no encontrado");
+                Error error = new Error("Usuario no encontrado.");
                 return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
             }
         }
@@ -108,7 +107,7 @@ public class UserService {
 
         // Verificar si hay un usuario autenticado
         if (authentication == null || !authentication.isAuthenticated()) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
@@ -117,14 +116,14 @@ public class UserService {
         try {
             usuario = (Usuario) authentication.getPrincipal();
         } catch (ClassCastException e) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
         // Verificar si los datos faltan
         if (usuarioActualizacion.getNombreUsuario() == null && usuarioActualizacion.getCorreo() == null
                 && usuarioActualizacion.getContraseña() == null) {
-            Error error = new Error("Datos faltantes");
+            Error error = new Error("Datos faltantes.");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -145,13 +144,13 @@ public class UserService {
             }
             // Guardar los cambios en la base de datos
             userRepository.save(usuario);
-            Exito exito = new Exito("Usuario actualizado con éxito");
+            Exito exito = new Exito("Usuario actualizado con éxito.");
             return new ResponseEntity<>(exito, HttpStatus.OK);
         } else if (!userRepository.existsById(usuarioId)) { // Si el usuario solicitado no existe
-            Error error = new Error("Usuario no encontrado");
+            Error error = new Error("Usuario no encontrado.");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         } else {
-            Error error = new Error("No autorizado"); // Si el usuario autenticado no coincide con el solicitado
+            Error error = new Error("No autorizado."); // Si el usuario autenticado no coincide con el solicitado
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
     }
@@ -163,7 +162,7 @@ public class UserService {
 
         // Verificar si hay un usuario autenticado
         if (authentication == null || !authentication.isAuthenticated()) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
@@ -172,22 +171,22 @@ public class UserService {
         try {
             usuario = (Usuario) authentication.getPrincipal();
         } catch (ClassCastException e) {
-            Error error = new Error("No autorizado");
+            Error error = new Error("No autorizado.");
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
 
         // Verificar si el usuario autenticado es el mismo que el usuario solicitado
         if (usuario.getUsuarioId() == usuarioId) {
             userRepository.delete(usuario);
-            Exito exito = new Exito("Usuario eliminado con éxito");
+            Exito exito = new Exito("Usuario eliminado con éxito.");
             return new ResponseEntity<>(exito, HttpStatus.OK);
         } else {
             // Verificar si el usuario solicitado existe
             if (userRepository.existsById(usuarioId)) {
-                Error error = new Error("No autorizado");
+                Error error = new Error("No autorizado.");
                 return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
             } else {
-                Error error = new Error("Usuario no encontrado");
+                Error error = new Error("Usuario no encontrado.");
                 return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
             }
         }

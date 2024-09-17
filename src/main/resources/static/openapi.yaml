@@ -127,6 +127,10 @@ paths:
       responses:
         "200":
           description: Usuario eliminado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exito"
         "404":
           description: Usuario no encontrado.
           content:

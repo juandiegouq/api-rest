@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Registro de un nuevo usuario
+    //Registro de un nuevo usuario
     @PostMapping
     public ResponseEntity<?> registrarUsuario(@RequestBody UsuarioRegistro usuarioRegistro) {
         return userService.registrarUsuario(usuarioRegistro);
