@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
+    container_name: postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -11,8 +12,31 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - mynetwork
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: java_app
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: mydatabase
+      DB_USER: user
+      DB_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
 
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  mynetwork:
+    driver: bridge
