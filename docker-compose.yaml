@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
@@ -26,15 +24,71 @@ services:
       DB_NAME: mydatabase
       DB_USER: user
       DB_PASSWORD: password
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
     ports:
       - "8080:8080"
     depends_on:
       - postgres
+      - rabbitmq
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # Puerto para conexiones de clientes
+      - "15672:15672" # Interfaz de gestión 
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: root
+    networks:
+      - mynetwork
+
+  mongo:
+    image: mongo:5.0.14  # Versión estable
+    container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mynetwork
+
+  elasticsearch:
+    image: elasticsearch:7.17.9  # Versión estable compatible con Graylog
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=changeme  # Contraseña mientras tanto
+    ports:
+      - "9200:9200"
+    networks:
+      - mynetwork
+
+  graylog:
+    image: graylog/graylog:5.0.10  # Versión estable
+    container_name: graylog
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=somepasswordsecret
+      - GRAYLOG_ROOT_PASSWORD_SHA2=6e3f4de80a1e7b5e80e64e8ebf1c09dff1b8c09dbd28e08640b8bba3a9c9e588 # Contraseña mientras tanto
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+      - GRAYLOG_MONGODB_URI=mongodb://mongo:27017/graylog  # Conexión a MongoDB
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200  # Conexión a Elasticsearch
+      - GRAYLOG_ELASTICSEARCH_SHARDS=1  # Número de shards de Elasticsearch
+      - GRAYLOG_ELASTICSEARCH_REPLICAS=0  # Número de réplicas
+    ports:
+      - "9000:9000"  # Interfaz web de Graylog
+      - "12201:12201" # Puerto para recibir logs
+    depends_on:
+      - mongo
+      - elasticsearch
     networks:
       - mynetwork
 
 volumes:
   postgres_data:
+    driver: local
+  mongo_data:
     driver: local
 
 networks:
