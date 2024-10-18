@@ -1,4 +1,6 @@
+version: '3.8'
 services:
+  # Base de datos PostgreSQL
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -11,8 +13,9 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - mynetwork
+      - backend
 
+  # Aplicación Java (Spring Boot)
   app:
     build:
       context: .
@@ -31,66 +34,76 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+      - logstash
     networks:
-      - mynetwork
+      - backend
+      - elk
 
+  # Servicio RabbitMQ
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
     ports:
-      - "5672:5672" # Puerto para conexiones de clientes
-      - "15672:15672" # Interfaz de gestión 
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: root
     networks:
-      - mynetwork
+      - backend
 
-  mongo:
-    image: mongo:5.0.14  # Versión estable
-    container_name: mongo
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - mynetwork
-
+  # Elasticsearch para almacenar los logs
   elasticsearch:
-    image: elasticsearch:7.17.9  # Versión estable compatible con Graylog
+    image: elasticsearch:7.16.2
     container_name: elasticsearch
+    restart: always
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data/
     environment:
-      - discovery.type=single-node
-      - ELASTIC_PASSWORD=changeme  # Contraseña mientras tanto
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: single-node
     ports:
       - "9200:9200"
+      - "9300:9300"
     networks:
-      - mynetwork
+      - elk
 
-  graylog:
-    image: graylog/graylog:5.0.10  # Versión estable
-    container_name: graylog
-    environment:
-      - GRAYLOG_PASSWORD_SECRET=somepasswordsecret
-      - GRAYLOG_ROOT_PASSWORD_SHA2=6e3f4de80a1e7b5e80e64e8ebf1c09dff1b8c09dbd28e08640b8bba3a9c9e588 # Contraseña mientras tanto
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
-      - GRAYLOG_MONGODB_URI=mongodb://mongo:27017/graylog  # Conexión a MongoDB
-      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200  # Conexión a Elasticsearch
-      - GRAYLOG_ELASTICSEARCH_SHARDS=1  # Número de shards de Elasticsearch
-      - GRAYLOG_ELASTICSEARCH_REPLICAS=0  # Número de réplicas
-    ports:
-      - "9000:9000"  # Interfaz web de Graylog
-      - "12201:12201" # Puerto para recibir logs
+  # Logstash para procesar los logs
+  logstash:
+    image: logstash:7.16.2
+    container_name: logstash
+    restart: always
+    volumes:
+      - ./logstash/:/logstash_dir
+    command: logstash -f /logstash_dir/logstash.conf
     depends_on:
-      - mongo
+      - elasticsearch
+    ports:
+      - "9600:9600"
+      - "5000:5000"  # Puerto donde Logstash recibe logs
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+
+  # Kibana para visualizar los logs
+  kibana:
+    image: kibana:7.16.2
+    container_name: kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    depends_on:
       - elasticsearch
     networks:
-      - mynetwork
+      - elk
 
 volumes:
-  postgres_data:
-    driver: local
-  mongo_data:
-    driver: local
+  postgres_data: {}
+  elastic_data: {}
 
 networks:
-  mynetwork:
-    driver: bridge
+  backend:
+  elk:
